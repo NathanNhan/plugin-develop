@@ -37,3 +37,5 @@ if(! defined('MPD_PLUGIN_DIR_URL')) {
 // add_action( 'wp_enqueue_scripts', 'load_assets');
 
 require_once MPD_PLUGIN_DIR_PATH . "/inc/hook.php";
+
+require_once MPD_PLUGIN_DIR_PATH . "/inc/custom-post-type.php";
