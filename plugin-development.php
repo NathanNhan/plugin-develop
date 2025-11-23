@@ -44,3 +44,26 @@ require_once MPD_PLUGIN_DIR_PATH . "/inc/shortcode.php";
 
 require_once MPD_PLUGIN_DIR_PATH . "/inc/admin-menu.php";
 
+require_once MPD_PLUGIN_DIR_PATH . "/inc/page-option.php";
+
+require_once MPD_PLUGIN_DIR_PATH . "/inc/settings-field.php";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+ 
+  
+
