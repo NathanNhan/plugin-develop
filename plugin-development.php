@@ -29,13 +29,18 @@ if(! defined('MPD_PLUGIN_DIR_URL')) {
     define('MPD_PLUGIN_DIR_URL',plugin_dir_url(__FILE__));
 }
 
-// function load_assets() {
-//     wp_enqueue_style( 'my-css',MPD_PLUGIN_DIR_URL . '/admin/css/style.css' , [], '1.0.0', 'all' );
-//     wp_enqueue_script( 'index-js', MPD_PLUGIN_DIR_URL . '/admin/js/index.js' , [], '1.0.0', true );
-// }
+function load_assets() {
+    wp_enqueue_style( 'my-public-css',MPD_PLUGIN_DIR_URL . '/public/css/style.css' , [], '1.0.0', 'all' );
+    // wp_enqueue_script( 'index-js', MPD_PLUGIN_DIR_URL . '/admin/js/index.js' , [], '1.0.0', true );
+}
 
-// add_action( 'wp_enqueue_scripts', 'load_assets');
+add_action( 'wp_enqueue_scripts', 'load_assets');
 
 require_once MPD_PLUGIN_DIR_PATH . "/inc/hook.php";
 
 require_once MPD_PLUGIN_DIR_PATH . "/inc/custom-post-type.php";
+
+require_once MPD_PLUGIN_DIR_PATH . "/inc/shortcode.php";
+
+require_once MPD_PLUGIN_DIR_PATH . "/inc/admin-menu.php";
+
