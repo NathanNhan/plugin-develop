@@ -1,5 +1,5 @@
 <?php 
-
+//bai 5 + 6 + 7
 add_action( 'admin_menu', 'mpd_options_page' );
 function mpd_options_page() {
     add_menu_page(
