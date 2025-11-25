@@ -29,6 +29,10 @@ if(! defined('MPD_PLUGIN_DIR_URL')) {
     define('MPD_PLUGIN_DIR_URL',plugin_dir_url(__FILE__));
 }
 
+if(!defined('MPD_PLUGIN_DB_VERSION')) {
+    define('MPD_PLUGIN_DB_VERSION', '2.0');
+}
+
 function load_assets() {
     wp_enqueue_style( 'my-public-css',MPD_PLUGIN_DIR_URL . '/public/css/style.css' , [], '1.0.0', 'all' );
     // wp_enqueue_script( 'index-js', MPD_PLUGIN_DIR_URL . '/admin/js/index.js' , [], '1.0.0', true );
@@ -47,6 +51,10 @@ require_once MPD_PLUGIN_DIR_PATH . "/inc/admin-menu.php";
 require_once MPD_PLUGIN_DIR_PATH . "/inc/page-option.php";
 
 require_once MPD_PLUGIN_DIR_PATH . "/inc/settings-field.php";
+
+require_once MPD_PLUGIN_DIR_PATH . "/inc/db.php";
+
+register_activation_hook( MPD_PLUGIN_DIR_PATH, 'mpd_install' );
 
 
 
