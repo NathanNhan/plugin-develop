@@ -56,3 +56,38 @@ function mpd_project_meta_shortcode($atts) {
    
 }
 add_shortcode('PROJECT_META', 'mpd_project_meta_shortcode');
+
+
+
+add_shortcode('MPD_MY_VOTING', 'show_voting_button');
+function show_voting_button() {
+
+    $atts = shortcode_atts(array(
+        'like' => 'Like',
+		'dislike' => 'Dislike'
+    ), $atts,'MPD_MY_VOTING');
+
+    $post_id = get_the_ID();
+    $user_id = get_current_user_id();
+
+    $html = '<div class="mpd-voting-buttons">';
+        $html .= sprintf(
+            '<button class="mpd-like" data-post-id="%s" data-user-id="%s">%s</button>',
+            esc_attr($post_id),
+            esc_attr($user_id),
+            esc_html($atts['like'])
+        );
+        $html .= " ";
+        $html .= sprintf(
+            '<button class="mpd-dislike" data-post-id="%s" data-user-id="%s">%s</button>',
+            esc_attr($post_id),
+            esc_attr($user_id),
+            esc_html($atts['dislike'])
+        );
+
+
+    $html .= '</div>';
+
+    return $html;
+
+}

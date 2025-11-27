@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if(! defined('MPD_PLUGIN_VERSION')) {
-    define('MPD_PLUGIN_VERSION','1.0.0');
+    define('MPD_PLUGIN_VERSION','3.0.0');
 }
 
 if(! defined('MPD_PLUGIN_DIR_PATH')) {
@@ -30,12 +30,15 @@ if(! defined('MPD_PLUGIN_DIR_URL')) {
 }
 
 if(!defined('MPD_PLUGIN_DB_VERSION')) {
-    define('MPD_PLUGIN_DB_VERSION', '2.0');
+    define('MPD_PLUGIN_DB_VERSION', '3.0');
 }
 
 require_once MPD_PLUGIN_DIR_PATH . "/inc/mpd-plugin.php";
 
-register_activation_hook( MPD_PLUGIN_DIR_PATH, 'mpd_install' );
+
+register_activation_hook(__FILE__, ['mpd_plugin', 'mpd_install']);
+
+
 
 
 
