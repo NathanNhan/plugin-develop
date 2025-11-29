@@ -97,28 +97,85 @@ if ( ! class_exists( 'mpd_plugin' ) ) {
 
             $post_id = intval($_POST['pid']);
             $user_id = intval($_POST['uid']);
+            $type    = sanitize_text_field($_POST['type']);
 
             if (!empty($post_id) && !empty($user_id)) {
 
+                // Validate vote type
+                if (!in_array($type, ['like', 'dislike'])) {
+                    wp_send_json_error([
+                        'message' => 'Invalid vote type. Only "like" or "dislike" allowed.'
+                    ]);
+                    return;
+                }
+
+                // Check if user already voted (bất kể loại vote nào)
+                $existing_vote = $wpdb->get_row(
+                    $wpdb->prepare(
+                        "SELECT * FROM $table_votes WHERE post_id = %d AND user_id = %d",
+                        $post_id,
+                        $user_id
+                    )
+                );
+
+                if ($existing_vote) {
+                    // Nếu vote cùng loại => thông báo đã vote rồi
+                    if ($existing_vote->vote_type === $type) {
+                        wp_send_json_error([
+                            'message' => 'You have already ' . $type . 'd this post'
+                        ]);
+                        return;
+                    }
+                    
+                    // Nếu vote khác loại => update vote type
+                    $updated = $wpdb->update(
+                        $table_votes,
+                        ['vote_type' => $type],
+                        [
+                            'post_id' => $post_id,
+                            'user_id' => $user_id
+                        ],
+                        ['%s'],
+                        ['%d', '%d']
+                    );
+
+                    if ($updated !== false) {
+                        wp_send_json_success([
+                            'message' => 'Vote updated successfully!',
+                            'vote_type' => $type,
+                            'action' => 'updated'
+                        ]);
+                    } else {
+                        wp_send_json_error([
+                            'message' => 'Update failed',
+                            'error' => $wpdb->last_error
+                        ]);
+                    }
+                    return;
+                }
+
+                // Insert new vote (nếu chưa vote bao giờ)
                 $query = $wpdb->insert(
                     $table_votes, 
                     [
                         'post_id' => $post_id,
                         'user_id' => $user_id,
-                        'vote_type' => 'like'
+                        'vote_type' => $type
                     ],
-                    ['%d','%d','%s']
+                    ['%d', '%d', '%s']
                 );
 
                 if ($query) {
-                    wp_send_json_success(['message' => 'Vote success!']);
+                    wp_send_json_success([
+                        'message' => 'Vote success!',
+                        'vote_type' => $type,
+                        'action' => 'inserted'
+                    ]);
                 } else {
-                    $error = $wpdb->last_error;
-
                     wp_send_json_error([
                         'message' => 'Insert failed',
-                        'error'   => $error,
-                        'sql'     => $wpdb->last_query
+                        'error' => $wpdb->last_error,
+                        'sql' => $wpdb->last_query
                     ]);
                 }
             }
